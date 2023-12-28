@@ -3,6 +3,11 @@ import path from 'path';
 import fs from 'fs'
 const filePath = path.join(os.homedir(), "waether-data.json")
 
+const TOKEN_DIC = {
+    token: 'token', 
+    city: 'city'
+}
+
 const saveKeyValue = async (key, value)=>{
     let data = {}
 
@@ -18,7 +23,7 @@ const saveKeyValue = async (key, value)=>{
 const getKeyValue = async key =>{
     if(await isExist(filePath)){
         const file = await fs.promises.readFile(filePath)
-        data = JSON.parse(file)
+        const data = JSON.parse(file)
         return data[key]
     }
     
@@ -32,4 +37,4 @@ const isExist = async (path) =>{
         return false
     }
 }
-export {saveKeyValue, getKeyValue}
+export {saveKeyValue, getKeyValue, TOKEN_DIC}
