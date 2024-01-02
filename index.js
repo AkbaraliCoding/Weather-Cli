@@ -32,7 +32,7 @@ const getForcast = async () =>{
     try {
         const city = process.env.CITY ?? await getKeyValue(TOKEN_DIC.city) 
         const response = await getWeather(city)
-        printWeather(response, getIcons(response.data.weather[0].icon))
+        printWeather(response.data)
         // console.log(response.data);
     } catch (error) {   
         if (error?.response?.status == 404) {
@@ -40,7 +40,7 @@ const getForcast = async () =>{
         }else if(error?.response?.status == 401){
             printErr('Token topilmadi, token top')
         }else{
-            printErr(error.message)
+            printErr(error.message);
         }
     }
 
