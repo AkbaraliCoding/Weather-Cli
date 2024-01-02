@@ -1,7 +1,7 @@
 import getArgs from './helpers/args.js'
-import { getWeather } from './sevices/api.services.js';
-import { printErr, printSucc, printHelp } from './sevices/log.services.js';
-import { TOKEN_DIC, saveKeyValue } from './sevices/storage.services.js';
+import { getIcons, getWeather } from './sevices/api.services.js';
+import { printErr, printSucc, printHelp, printWeather } from './sevices/log.services.js';
+import { TOKEN_DIC, getKeyValue, saveKeyValue } from './sevices/storage.services.js';
 
 const saveToken = async token =>{
     if (!token.length) {
@@ -10,12 +10,41 @@ const saveToken = async token =>{
     }
     try {
         await saveKeyValue(TOKEN_DIC.token, token)
-        printSucc('Token Was Saved')
+        printSucc('Token was saqlandi')
     } catch (error) {
         printErr(error.message)
     }
 }
 
+const saveCity = async city =>{
+    if (!city.length) {
+        printErr('city Kiritilmadi Mol')
+        return false
+    }
+    try {
+        await saveKeyValue(TOKEN_DIC.city, city)
+        printSucc('city was saqlandi')
+    } catch (error) {
+        printErr(error.message)
+    }
+}
+const getForcast = async () =>{
+    try {
+        const city = process.env.CITY ?? await getKeyValue(TOKEN_DIC.city) 
+        const response = await getWeather(city)
+        printWeather(response, getIcons(response.data.weather[0].icon))
+        // console.log(response.data);
+    } catch (error) {   
+        if (error?.response?.status == 404) {
+            printErr('Shahar topilmadi, boshqa shahar yoz')
+        }else if(error?.response?.status == 401){
+            printErr('Token topilmadi, token top')
+        }else{
+            printErr(error.message)
+        }
+    }
+
+}
 const startCli = () =>{
     const args = getArgs(process.argv)
     if (args.h) {
@@ -23,12 +52,12 @@ const startCli = () =>{
         printHelp()
     }
     if (args.s) {
-        // save sity
+        return saveCity(args.s)
     }if (args.t) {
         return saveToken(args.t)
         // save token
     }
-    getWeather("Asaka")
+    getForcast()
 }
 
 startCli()
