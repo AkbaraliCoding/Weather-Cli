@@ -48,14 +48,12 @@ const getForcast = async () =>{
 const startCli = () =>{
     const args = getArgs(process.argv)
     if (args.h) {
-        //help Center
         printHelp()
     }
     if (args.s) {
         return saveCity(args.s)
     }if (args.t) {
         return saveToken(args.t)
-        // save token
     }
     getForcast()
 }
