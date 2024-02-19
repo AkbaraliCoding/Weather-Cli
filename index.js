@@ -32,8 +32,7 @@ const getForcast = async () =>{
     try {
         const city = process.env.CITY ?? await getKeyValue(TOKEN_DIC.city) 
         const response = await getWeather(city)
-        printWeather(response.data)
-        // console.log(response.data);
+        printWeather(response)
     } catch (error) {   
         if (error?.response?.status == 404) {
             printErr('Shahar topilmadi, boshqa shahar yoz')

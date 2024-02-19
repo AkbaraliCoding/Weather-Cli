@@ -24,7 +24,7 @@ const getIcons = (icon) =>{
 
 const getWeather = async city =>{
     
-    const token = process.env.TOKEN ?? await getKeyValue(TOKEN_DIC.token)
+    const token = process.env.TOKEN ?? (await getKeyValue(TOKEN_DIC.token))
     if (!token) {
         throw new Error("api doesn't exist, -t [API_KEY] for saving token")
     }
